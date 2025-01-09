@@ -144,6 +144,7 @@ cython_debug/
 *.temp
 *.bak
 *.old
+.DS_Store
 
 # Node JS
 node_modules/

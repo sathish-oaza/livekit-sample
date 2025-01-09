@@ -47,14 +47,14 @@ async def entrypoint(ctx: JobContext):
         stt=azure.STT(
             speech_key=os.getenv("AZURE_SPEECH_KEY"),
             speech_region=os.getenv("AZURE_SPEECH_REGION"),
-            speech_host=os.getenv("AZURE_SPEECH_HOST")
+            speech_host=os.getenv("AZURE_STT_HOST")
         ),
         llm=openai.LLM.with_azure(
             model=os.getenv("OPENAI_MODEL"),
-            azure_endpoint=os.getenv("AZURE_ENDPOINT"),
-            azure_deployment=os.getenv("AZURE_DEPLOYMENT"),
-            api_version=os.getenv("AZURE_API_VERSION"),
-            api_key=os.getenv("AZURE_API_KEY")
+            azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT"),
+            azure_deployment=os.getenv("AZURE_OPENAI_DEPLOYMENT"),
+            api_version=os.getenv("AZURE_OPENAI_API_VERSION"),
+            api_key=os.getenv("AZURE_OPENAI_API_KEY")
         ),
         tts=azure.TTS(
             speech_key=os.getenv("AZURE_SPEECH_KEY"),
