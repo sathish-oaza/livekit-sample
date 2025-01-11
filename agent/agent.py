@@ -1,4 +1,3 @@
-import os
 import logging
 
 from dotenv import load_dotenv
@@ -9,9 +8,10 @@ from livekit.agents import (
     WorkerOptions,
     cli,
     llm,
+    metrics,
 )
 from livekit.agents.pipeline import VoicePipelineAgent
-from livekit.plugins import openai, deepgram, silero, azure
+from livekit.plugins import openai, silero, azure, turn_detector
 
 
 load_dotenv(dotenv_path=".env.local")
@@ -45,22 +45,23 @@ async def entrypoint(ctx: JobContext):
     agent = VoicePipelineAgent(
         vad=ctx.proc.userdata["vad"],
         stt=azure.STT(
-            speech_key=os.getenv("AZURE_SPEECH_KEY"),
-            speech_region=os.getenv("AZURE_SPEECH_REGION"),
-            speech_host=os.getenv("AZURE_STT_HOST")
+            speech_key="AZgPJ0wY7IqNucJyVa1CVXrqNwQ2ATEq0m5PKaqPOT3S4YSeZ2ySJQQJ99BAACHYHv6XJ3w3AAAAACOG8RRG",
+            speech_region="eastus2",
+            speech_host="https://eastus2.stt.speech.microsoft.com"
         ),
         llm=openai.LLM.with_azure(
-            model=os.getenv("OPENAI_MODEL"),
-            azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT"),
-            azure_deployment=os.getenv("AZURE_OPENAI_DEPLOYMENT"),
-            api_version=os.getenv("AZURE_OPENAI_API_VERSION"),
-            api_key=os.getenv("AZURE_OPENAI_API_KEY")
+            model="gpt-4o",
+            azure_endpoint="https://ai-cmseusdev352332062725.cognitiveservices.azure.com",
+            azure_deployment="gpt-4o",
+            api_version="2024-08-01-preview",
+            api_key="AZgPJ0wY7IqNucJyVa1CVXrqNwQ2ATEq0m5PKaqPOT3S4YSeZ2ySJQQJ99BAACHYHv6XJ3w3AAAAACOG8RRG"
         ),
         tts=azure.TTS(
-            speech_key=os.getenv("AZURE_SPEECH_KEY"),
-            speech_region=os.getenv("AZURE_SPEECH_REGION"),
-            speech_host=os.getenv("AZURE_TTS_HOST")
+            speech_key="AZgPJ0wY7IqNucJyVa1CVXrqNwQ2ATEq0m5PKaqPOT3S4YSeZ2ySJQQJ99BAACHYHv6XJ3w3AAAAACOG8RRG",
+            speech_region="eastus2",
+            speech_host="https://eastus2.tts.speech.microsoft.com"
         ),
+        turn_detector=turn_detector.EOUModel(),
         chat_ctx=initial_ctx,
     )
 
