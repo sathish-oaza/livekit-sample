@@ -1,3 +1,4 @@
+import os
 import logging
 
 from dotenv import load_dotenv
@@ -45,21 +46,21 @@ async def entrypoint(ctx: JobContext):
     agent = VoicePipelineAgent(
         vad=ctx.proc.userdata["vad"],
         stt=azure.STT(
-            speech_key="AZgPJ0wY7IqNucJyVa1CVXrqNwQ2ATEq0m5PKaqPOT3S4YSeZ2ySJQQJ99BAACHYHv6XJ3w3AAAAACOG8RRG",
-            speech_region="eastus2",
-            speech_host="https://eastus2.stt.speech.microsoft.com"
+            speech_key=os.getenv("AZURE_SPEECH_KEY"),
+            speech_region=os.getenv("AZURE_SPEECH_REGION"),
+            speech_host=os.getenv("AZURE_SPEECH_STT_HOST")
         ),
         llm=openai.LLM.with_azure(
-            model="gpt-4o",
-            azure_endpoint="https://ai-cmseusdev352332062725.cognitiveservices.azure.com",
-            azure_deployment="gpt-4o",
-            api_version="2024-08-01-preview",
-            api_key="AZgPJ0wY7IqNucJyVa1CVXrqNwQ2ATEq0m5PKaqPOT3S4YSeZ2ySJQQJ99BAACHYHv6XJ3w3AAAAACOG8RRG"
+            model=os.getenv("OPENAI_MODEL"),
+            azure_endpoint=os.getenv("AZURE_ENDPOINT"),
+            azure_deployment=os.getenv("AZURE_DEPLOYMENT"),
+            api_version=os.getenv("AZURE_API_VERSION"),
+            api_key=os.getenv("AZURE_API_KEY")
         ),
         tts=azure.TTS(
-            speech_key="AZgPJ0wY7IqNucJyVa1CVXrqNwQ2ATEq0m5PKaqPOT3S4YSeZ2ySJQQJ99BAACHYHv6XJ3w3AAAAACOG8RRG",
-            speech_region="eastus2",
-            speech_host="https://eastus2.tts.speech.microsoft.com"
+            speech_key=os.getenv("AZURE_SPEECH_KEY"),
+            speech_region=os.getenv("AZURE_SPEECH_REGION"),
+            speech_host=os.getenv("AZURE_SPEECH_TTS_HOST")
         ),
         turn_detector=turn_detector.EOUModel(),
         chat_ctx=initial_ctx,
